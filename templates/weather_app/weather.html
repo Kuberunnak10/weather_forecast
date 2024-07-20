@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content%}
+<h1>Прогноз погоды</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Получить прогноз</button>
+    </form>
+
+    {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
+    <br>
+    <br>
+
+    {% if weather_info %}
+        <h2>Прогноз на ближайшее время:</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Время</th>
+                    <th>Температура (°C)</th>
+                    <th>Скорость ветра (м/с)</th>
+                    <th>Влажность (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t, temp_val, wind_val, hum_val in weather_info %}
+                    <tr>
+                        <td>{{ t }}</td>
+                        <td>{{ temp_val }}°C</td>
+                        <td>{{ wind_val }} м/с</td>
+                        <td>{{ hum_val }}%</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+    <br>
+    <br>
+    {% if recent_cities %}
+        <h2>Вы уже смотрели ранее:</h2>
+        <ul>
+            {% for city in recent_cities %}
+                <li>{{ city.city }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
